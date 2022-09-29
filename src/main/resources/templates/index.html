@@ -15,5 +15,25 @@
 <td><a th:href="@{http://localhost:8080/view/(id=${film.getId()})}">Afficher</a></td></tr>
 </table>
 
+<h2>Ajouter un film</h2>
+<form th:action="@{/films/add}", th:object="${film}" method="post">
+    <label for="idInput">id:</label>
+    <input type="number" th:field="*{id}" id="idInput">
+    <label for="titreInput">Titre:</label>
+    <input type="text" th:field="*{titre}" id="titreInput">
+    <label for="anneeInput">Année de sortie du film:</label>
+    <input type="number" th:field="*{annee}" id="anneeInput">
+    <label for="dureeInput">Durée du film:</label>
+    <input type="number" th:field="*{duree}" id="dureeInput">
+    <label for="synopsisInput">Synopsis du film:</label>
+    <input type="text" th:field="*{synopsis}" id="synopsisInput">
+    <label for="realInput"> Réalisateur</label>
+        <select class="form-select" th:field="*{realisateur}" required id="realInput">
+            <option th:each="realisateur: ${@realisateurs}" th:value="${realisateur.id}" th:text="${realisateur.nom}"></option>
+        </select>
+
+    <input type="submit">
+</form>
+
 </body>
 </html>

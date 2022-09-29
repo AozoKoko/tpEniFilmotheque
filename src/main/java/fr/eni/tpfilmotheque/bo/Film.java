@@ -8,12 +8,26 @@ public class Film {
     private  int duree;
     private  String synopsis;
 
+    private Participant realisateur;
+
+
+    public Film() {
+    }
     public Film(Long id, String titre, int annee, int duree, String synopsis) {
         this.id = id;
         this.titre = titre;
         this.annee = annee;
         this.duree = duree;
         this.synopsis = synopsis;
+    }
+
+    public Film(Long id, String titre, int annee, int duree, String synopsis, Participant realisateur) {
+        this.id = id;
+        this.titre = titre;
+        this.annee = annee;
+        this.duree = duree;
+        this.synopsis = synopsis;
+        this.realisateur = realisateur;
     }
 
     public Long getId() {
@@ -56,6 +70,14 @@ public class Film {
         this.synopsis = synopsis;
     }
 
+    public Participant getRealisateur() {
+        return realisateur;
+    }
+
+    public void setRealisateur(Participant realisateur) {
+        this.realisateur = realisateur;
+    }
+
     @Override
     public String toString() {
         return "Film{" +
@@ -64,6 +86,7 @@ public class Film {
                 ", annee=" + annee +
                 ", duree=" + duree +
                 ", synopsis='" + synopsis + '\'' +
+                ", realisateur='" + realisateur.toString() + '\'' +
                 '}';
     }
 }

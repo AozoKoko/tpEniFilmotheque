@@ -1,10 +1,10 @@
 package fr.eni.tpfilmotheque.controller;
 
 import fr.eni.tpfilmotheque.bo.Film;
+import fr.eni.tpfilmotheque.bo.Participant;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 
 import java.sql.Array;
 import java.util.ArrayList;
@@ -14,22 +14,33 @@ import java.util.List;
 @RequestMapping("/films")
 public class MainController {
 
-    private Film film1 = new Film(1L,"Un film",2020,120,"Un film qui se finit bien");
-    private Film film2 = new Film(2L,"Un film 2 le retour de l'enfant héros",2020,120,"Un film qui se finit mal");
-    private Film film3 = new Film(3L,"Un film révélations",2020,120,"Un film qui se finit pas");
+    //service initiation valeurs
+
+    private Participant superRealisateur= new Participant(1L,"Filmeur", "Jean");
+    private Film film1 = new Film(1L,"Un film",2020,120,"Un film qui se finit bien",superRealisateur);
+    private Film film2 = new Film(2L,"Un film 2 le retour de l'enfant héros",2020,120,"Un film qui se finit mal",superRealisateur);
+    private Film film3 = new Film(3L,"Un film révélations",2020,120,"Un film qui se finit pas",superRealisateur);
 
 
     private List<Film> array = new ArrayList<Film>();
+    private List<Participant> realisateurs = new ArrayList<Participant>();
 
-
-
-    @RequestMapping("")
-    public String getAllFilms(Model model){
+    public MainController(){
         array.add(film1);
         array.add(film2);
         array.add(film3);
+    }
 
+
+    @GetMapping("")
+    public String getAllFilms(Model model){
+
+
+        model.addAttribute("film" , new Film(0L,"titre",2000,120,"synopsis",superRealisateur));
         model.addAttribute("listeFilms",array);
+
+        realisateurs.add(superRealisateur);
+        model.addAttribute("listeReal",realisateurs);
 
         return "index";
     }
@@ -47,6 +58,12 @@ public class MainController {
         }
 
         return "film";
+    }
+
+    @PostMapping("/add")
+    public String newFilm(@ModelAttribute("film") Film film/*, @ModelAttribute("realisateurs") List<Participant> realisateurs*/){
+        array.add(film);
+        return "redirect:/films";
     }
 
 }
