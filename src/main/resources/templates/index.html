@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+
+<table><tr th:each="film: ${listeFilms}">
+    <td th:text="${film.getId()}"></td>
+    <td th:text="${film.getTitre()}"></td>
+    <td th:text="${film.getAnnee()}"></td>
+    <td th:text="${film.getDuree()}"></td>
+    <td th:text="${film.getSynopsis()}"></td>
+<td><a th:href="@{http://localhost:8080/view/(id=${film.getId()})}">Afficher</a></td></tr>
+</table>
+
+</body>
+</html>
