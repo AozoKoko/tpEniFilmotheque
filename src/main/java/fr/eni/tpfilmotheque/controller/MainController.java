@@ -4,8 +4,10 @@ import fr.eni.tpfilmotheque.bo.Film;
 import fr.eni.tpfilmotheque.bo.Participant;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.sql.Array;
 import java.util.ArrayList;
 import java.util.List;
@@ -45,7 +47,7 @@ public class MainController {
         return "index";
     }
 
-    @RequestMapping("view/{id}")
+    @RequestMapping("view")
     public String getSpecificFilm(@RequestParam int id,
                                   Model modele){
 
@@ -61,8 +63,14 @@ public class MainController {
     }
 
     @PostMapping("/add")
-    public String newFilm(@ModelAttribute("film") Film film/*, @ModelAttribute("realisateurs") List<Participant> realisateurs*/){
-        array.add(film);
+    public String newFilm(@Valid @ModelAttribute("film") Film film, BindingResult erreur){
+        if (!erreur.hasErrors()){
+            array.add(film);
+        }else {
+            return "index";
+        }
+
+
         return "redirect:/films";
     }
 

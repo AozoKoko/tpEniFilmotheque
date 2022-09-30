@@ -1,13 +1,26 @@
 package fr.eni.tpfilmotheque.bo;
 
+import javax.validation.constraints.*;
+import java.time.LocalDate;
+
 public class Film {
 
+    @Min(0)
     private Long id;
+
+    @NotBlank
     private  String titre;
+
+    @Min(1850)
     private  int annee;
+
+    @Min(1)
     private  int duree;
+
+    @Size(min = 20, max = 255)
     private  String synopsis;
 
+    @NotNull
     private Participant realisateur;
 
 

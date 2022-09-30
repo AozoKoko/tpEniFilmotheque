@@ -4,7 +4,9 @@ import fr.eni.tpfilmotheque.bo.Participant;
 import fr.eni.tpfilmotheque.service.RealisateurServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.convert.converter.Converter;
+import org.springframework.stereotype.Component;
 
+@Component
 public class StringToParticipantConverter implements Converter<String, Participant>{
 
     private RealisateurServiceImpl service;

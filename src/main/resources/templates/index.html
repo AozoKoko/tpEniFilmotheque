@@ -12,25 +12,30 @@
     <td th:text="${film.getAnnee()}"></td>
     <td th:text="${film.getDuree()}"></td>
     <td th:text="${film.getSynopsis()}"></td>
-<td><a th:href="@{http://localhost:8080/view/(id=${film.getId()})}">Afficher</a></td></tr>
-</table>
+    <td th:text="${film.getRealisateur().getNom()}"></td>
+    <td><a th:href="@{http://localhost:8080/films/view/(id=${film.getId()})}">Afficher</a></td></tr>
+    </table>
 
-<h2>Ajouter un film</h2>
-<form th:action="@{/films/add}", th:object="${film}" method="post">
-    <label for="idInput">id:</label>
-    <input type="number" th:field="*{id}" id="idInput">
-    <label for="titreInput">Titre:</label>
-    <input type="text" th:field="*{titre}" id="titreInput">
-    <label for="anneeInput">Année de sortie du film:</label>
-    <input type="number" th:field="*{annee}" id="anneeInput">
-    <label for="dureeInput">Durée du film:</label>
-    <input type="number" th:field="*{duree}" id="dureeInput">
-    <label for="synopsisInput">Synopsis du film:</label>
-    <input type="text" th:field="*{synopsis}" id="synopsisInput">
-    <label for="realInput"> Réalisateur</label>
-        <select class="form-select" th:field="*{realisateur}" required id="realInput">
-            <option th:each="realisateur: ${@realisateurs}" th:value="${realisateur.id}" th:text="${realisateur.nom}"></option>
-        </select>
+    <h2>Ajouter un film</h2>
+    <form th:action="@{/films/add}", th:object="${film}" method="post">
+
+        <div class="alert alert-danger" th:if="${#fields.hasErrors('*')}" >
+            <p th:text="ERREUR">Message d'erreur</p>
+        </div>
+        <label for="idInput">id:</label>
+        <input type="number" th:field="*{id}" id="idInput">
+        <label for="titreInput">Titre:</label>
+        <input type="text" th:field="*{titre}" id="titreInput">
+        <label for="anneeInput">Année de sortie du film:</label>
+        <input type="number" th:field="*{annee}" id="anneeInput">
+        <label for="dureeInput">Durée du film:</label>
+        <input type="number" th:field="*{duree}" id="dureeInput">
+        <label for="synopsisInput">Synopsis du film:</label>
+        <input type="text" th:field="*{synopsis}" id="synopsisInput">
+        <label for="realInput"> Réalisateur</label>
+            <select class="form-select" th:field="*{realisateur}" required id="realInput">
+                <option th:each="realisateur: ${@realisateurs}" th:value="${realisateur.id}" th:text="${realisateur.nom}"></option>
+            </select>
 
     <input type="submit">
 </form>
