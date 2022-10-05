@@ -1,25 +1,35 @@
 package fr.eni.tpfilmotheque.bo;
 
+import javax.persistence.*;
 import javax.validation.constraints.*;
 import java.time.LocalDate;
 
+@Entity
+@Table(name = "FILMS")
 public class Film {
 
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Min(0)
     private Long id;
 
+    @Basic(optional = false)
     @NotBlank
     private  String titre;
 
+    @Basic(optional = false)
     @Min(1850)
     private  int annee;
 
+    @Basic(optional = false)
     @Min(1)
     private  int duree;
 
+    @Basic(optional = false)
     @Size(min = 20, max = 255)
     private  String synopsis;
 
+    @ManyToOne
     @NotNull
     private Participant realisateur;
 

@@ -12,5 +12,26 @@
 <p th:text="${film.duree}"></p>
 <p th:text="${film.synopsis}"></p>
 
+<table><tr th:each="avisDeListe: ${lesAvis}">
+    <td th:text="${avisDeListe.getId()}"></td>
+    <td th:text="${avisDeListe.getNote()}"></td>
+    <td th:text="${avisDeListe.getCommentaire()}"></td>
+</tr>
+</table>
+
+
+<h3>Ajouter un avis :</h3>
+<form th:action="@{/films/avis/add}", th:object="${avis}" method="post">
+<!--    <div class="alert alert-danger" th:if="${#fields.hasErrors('*')}" >-->
+<!--        <p th:text="ERREUR">Message d'erreur</p>-->
+<!--    </div>-->
+    <label for="noteInput">votre note:</label>
+    <input type="number" th:field="*{note}" id="noteInput">
+    <label for="commentaireInput">votre commentaire:</label>
+    <input type="text" th:field="*{commentaire}" id="commentaireInput">
+    <input type="submit">
+    <input type="hidden" th:field="${film.id}" th:name="id" id="filmInput" th:value="${film.id}">
+</form>
+
 </body>
 </html>

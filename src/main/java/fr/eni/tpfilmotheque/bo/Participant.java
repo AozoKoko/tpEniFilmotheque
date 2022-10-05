@@ -1,8 +1,18 @@
 package fr.eni.tpfilmotheque.bo;
 
+import javax.persistence.*;
+
+@Entity
+@Table(name = "PARTICIPANTS")
 public class Participant {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
+    @Basic(optional = false)
     private String nom;
+
+    @Basic(optional = false)
     private String prenom;
 
     public Participant(Long id, String nom, String prenom) {
@@ -10,6 +20,11 @@ public class Participant {
         this.nom = nom;
         this.prenom = prenom;
     }
+
+    public Participant() {
+        super();
+    }
+
 
     public Long getId() {
         return id;

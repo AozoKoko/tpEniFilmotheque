@@ -8,4 +8,6 @@ import java.util.List;
 public interface FilmService {
     public List<Film> listeDesFilms();
     public List<Participant> listeDesRealisateurs();
+    public void createFilm(Film  film);
+    public Film getFilmById(Long id);
 }

@@ -1,48 +1,61 @@
 package fr.eni.tpfilmotheque.controller;
 
+import fr.eni.tpfilmotheque.bo.Avis;
+import fr.eni.tpfilmotheque.repository.FilmRepository;
+import fr.eni.tpfilmotheque.repository.ParticipantRepository;
 import fr.eni.tpfilmotheque.bo.Film;
 import fr.eni.tpfilmotheque.bo.Participant;
+import fr.eni.tpfilmotheque.service.AvisService;
+import fr.eni.tpfilmotheque.service.FilmService;
+import fr.eni.tpfilmotheque.service.FilmServiceImplData;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
-import java.sql.Array;
 import java.util.ArrayList;
 import java.util.List;
 
 @Controller
-@RequestMapping("/films")
+@RequestMapping({"","/films"})
 public class MainController {
 
-    //service initiation valeurs
 
-    private Participant superRealisateur= new Participant(1L,"Filmeur", "Jean");
-    private Film film1 = new Film(1L,"Un film",2020,120,"Un film qui se finit bien",superRealisateur);
-    private Film film2 = new Film(2L,"Un film 2 le retour de l'enfant héros",2020,120,"Un film qui se finit mal",superRealisateur);
-    private Film film3 = new Film(3L,"Un film révélations",2020,120,"Un film qui se finit pas",superRealisateur);
+
+
+    private FilmService filmService ;
+    private AvisService avisService ;
 
 
     private List<Film> array = new ArrayList<Film>();
     private List<Participant> realisateurs = new ArrayList<Participant>();
+    private List<Avis> avisList = new ArrayList<Avis>();
 
-    public MainController(){
-        array.add(film1);
-        array.add(film2);
-        array.add(film3);
+    private Avis avis;
+
+
+    //Nécessité d'utiliser l'injection par constructeur pour instancier le bon service
+    public MainController(FilmService filmService, AvisService avisService){
+
+        this.filmService = filmService;
+        this.avisService = avisService;
     }
+
+
 
 
     @GetMapping("")
     public String getAllFilms(Model model){
 
 
-        model.addAttribute("film" , new Film(0L,"titre",2000,120,"synopsis",superRealisateur));
+        array = filmService.listeDesFilms();
+        model.addAttribute("film" , new Film(0L,"titre",2000,120,"synopsis",new Participant(1L,"Nom Real","PrenomReal")));
         model.addAttribute("listeFilms",array);
 
-        realisateurs.add(superRealisateur);
-        model.addAttribute("listeReal",realisateurs);
+
+        realisateurs = filmService.listeDesRealisateurs();
+        model.addAttribute("realisateurs",realisateurs);
 
         return "index";
     }
@@ -51,13 +64,28 @@ public class MainController {
     public String getSpecificFilm(@RequestParam int id,
                                   Model modele){
 
+        Film newFilm =new Film();
         for (int i = 0; i < array.size(); i++){
             if(id == array.get(i).getId()){
-                Film newFilm = array.get(i);
+                newFilm = array.get(i);
 
                 modele.addAttribute("film",newFilm);
+                modele.addAttribute("avis", new Avis(0,"RAS"));
             }
         }
+        System.out.println(newFilm.getTitre());
+
+        List<Avis> lesAvisDuFilm = new ArrayList<>();
+        avisList = avisService.listeDesAvis();
+        for (int i = 0; i < avisList.size(); i++) {
+            System.out.println(newFilm.getTitre());
+            if (newFilm.getId() == avisList.get(i).getFilm().getId()) {
+                lesAvisDuFilm.add(avisList.get(i));
+                System.out.println(avisList.get(i).getCommentaire());
+            }
+
+        }
+        modele.addAttribute("lesAvis",lesAvisDuFilm);
 
         return "film";
     }
@@ -65,10 +93,26 @@ public class MainController {
     @PostMapping("/add")
     public String newFilm(@Valid @ModelAttribute("film") Film film, BindingResult erreur){
         if (!erreur.hasErrors()){
-            array.add(film);
+          filmService.createFilm(film);
         }else {
             return "index";
         }
+
+
+        return "redirect:/films";
+    }
+
+    @PostMapping("/avis/add")
+    public String newAvis(@Valid @ModelAttribute("avis") Avis avis, BindingResult erreur, @RequestParam("id") Long id, Model model){
+
+
+        Film film = filmService.getFilmById(id);
+        model.addAttribute("film", film);
+        avis.setFilm(film);
+        avis.setId(null);
+
+        System.out.println(avis);
+        avisService.createAvis(avis);
 
 
         return "redirect:/films";
